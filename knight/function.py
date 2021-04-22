@@ -137,8 +137,8 @@ def output(arg: Value) -> Null:
 	"""
 	s = str(arg)
 
-	if s[-1] == '\\':
-		print(s[:-2], end='')
+	if s and s[-1] == '\\':
+		print(s[:-1], end='')
 	else:
 		print(s)
 
@@ -216,13 +216,10 @@ def while_(cond: Value, body: Value) -> Null:
 @register('=')
 def assign(name: Value, value: Value) -> Value:
 	"""
-	Assigns `value` to `name`, converting `name` to an `Identifier` if
-	it isn't already.
+	Assigns `value` to `name`, where `name` must be an `Identifier`.
 
 	Returns `value`.
 	"""
-	if not isinstance(name, Identifier):
-		name = Identifier(str(name))
 
 	value = value.run()
 	name.assign(value)
