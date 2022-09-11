@@ -35,8 +35,7 @@ class String(Literal[bool]):
 
 		if body is None:
 			raise ParseError(f'unterminated string encountered: {stream}')
-		else:
-			return String(body)
+		return cls(body)
 
 	def __int__(self) -> int:
 		"""
@@ -66,6 +65,6 @@ class String(Literal[bool]):
 
 	def __gt__(self, rhs: Value) -> bool:
 		"""
-		Checks to see if `self` is lexicographically less than `rhs`.
+		Checks to see if `self` is lexicographically greater than `rhs`.
 		"""
 		return self.data > str(rhs)

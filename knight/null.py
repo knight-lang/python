@@ -13,8 +13,6 @@ class Null(Literal[None]):
 		""" Parses `Null` if the stream starts with `N`. """
 		if stream.matches(Null.REGEX):
 			return cls()
-		else:
-			return None
 
 	def __init__(self):
 		"""
@@ -31,18 +29,15 @@ class Null(Literal[None]):
 		return 0
 
 	def __str__(self) -> str:
-		""" Simply returns `"null"` """
-		return 'null'
+		""" Simply returns an empty string. """
+		return ''
 
 	def __repr__(self) -> str:
 		""" Gets a debugging representation of this class. """
 		return 'Null()'
 
 	def __eq__(self, rhs: Value) -> bool:
-		"""
-		Null is only equal to itself, and as we have one `INSTANCE`, we
-		can use `is`.
-		"""
+		""" Null is only equal to itself. """
 		return isinstance(rhs, Null)
 
 	def __lt__(self, _: Value):

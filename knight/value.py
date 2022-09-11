@@ -19,12 +19,8 @@ class Value():
 		stream.strip()
 
 		for cls in TYPES:
-			value = cls.parse(stream)
-
-			if value is not None:
+			if (value := cls.parse(stream)) is not None:
 				return value
-
-		return None
 
 	def __init_subclass__(cls, parse: bool  =True, **rest):
 		""" Adds `cls` to the list of classes to parse. """

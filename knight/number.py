@@ -22,8 +22,6 @@ class Number(Literal[int]):
 		"""
 		if match := stream.matches(Number.REGEX):
 			return cls(int(match))
-		else:
-			return None
 
 	def __add__(self, rhs: Value) -> Number:
 		""" Converts `rhs` to an `int` and adds it to `self.` """

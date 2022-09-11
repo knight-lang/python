@@ -3,7 +3,7 @@ from typing import Union
 
 class Stream():
 	""" The class used when parsing data. """
-	WHITESPACE: re.Pattern = re.compile(r'([\s(){}\[\]:]+|\#[^\n]*)+')
+	WHITESPACE: re.Pattern = re.compile(r'([\s():]+|\#[^\n]*)+')
 
 	def __init__(self, source: str):
 		""" Creates a new `Stream` with the given source. """
@@ -23,7 +23,8 @@ class Stream():
 
 	def peek(self) -> Union[None, str]:
 		""" Returns the first character of the stream """
-		return self.source[0] if self.source else None
+		if self.source:
+			return self.source[0]
 
 	def matches(self, rxp: re.Pattern, index: int = 0) -> Union[None, str]:
 		"""
@@ -34,7 +35,6 @@ class Stream():
 		default value of `0` means the entire matched regex is returned.)
 		"""
 		match = rxp.match(self.source)
-
 		if match is None:
 			return None
 

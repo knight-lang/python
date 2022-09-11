@@ -13,8 +13,6 @@ class Boolean(Literal[bool]):
 		""" Parses a `Boolean` if the stream starts with `T` or `F`. """
 		if match := stream.matches(Boolean.REGEX, 1):
 			return cls(match == 'T')
-		else:
-			return None
 
 	def __str__(self) -> str:
 		""" Returns `"true"` when true and `"false"` when false. """

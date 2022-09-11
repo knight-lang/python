@@ -1,6 +1,6 @@
 from __future__ import annotations
 from knight import Value, Stream, ParseError, RunError, \
-                   Identifier, Boolean, Null, String, Number
+                   Variable, Boolean, Null, String, Number
 from typing import Union, Dict, List
 from random import randint
 
@@ -216,7 +216,7 @@ def while_(cond: Value, body: Value) -> Null:
 @register('=')
 def assign(name: Value, value: Value) -> Value:
 	"""
-	Assigns `value` to `name`, where `name` must be an `Identifier`.
+	Assigns `value` to `name`, where `name` must be an `Variable`.
 
 	Returns `value`.
 	"""
