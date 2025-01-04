@@ -15,6 +15,13 @@ class String(Literal[str]):
 	SINGLE_REGEX: re.Pattern = re.compile(r"([^']*)'")
 	DOUBLE_REGEX: re.Pattern = re.compile(r'([^"]*)"')
 	INT_REGEX: re.Pattern = re.compile(r'^\s*[-+]?\d+')
+	REPLACEMENT_MAP = {
+		'\"': '\\"',
+		'\\': '\\\\',
+		'\r': '\\r',
+		'\n': '\\n',
+		'\t': '\\t',
+	}
 
 	@classmethod
 	def parse(cls, stream: Stream) -> Optional[String]:
@@ -37,10 +44,16 @@ class String(Literal[str]):
 			raise ParseError(f'unterminated string encountered: {stream}')
 		return cls(body)
 
-
 	def __iter__(self):
 		for char in str(self):
 			yield String(char)
+
+	def __repr__(self) -> str:
+		""" Gets a debugging representation of this class. """
+		r = ""
+		for char in self.data:
+			r += self.REPLACEMENT_MAP[char] if char in self.REPLACEMENT_MAP else char
+		return f'"{r}"'
 
 	def __int__(self) -> int:
 		"""

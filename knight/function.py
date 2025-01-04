@@ -1,6 +1,6 @@
 from __future__ import annotations
 from knight import Value, Stream, ParseError, RunError, \
-                   Variable, Boolean, Null, String, Number
+                   Variable, Boolean, Null, String, Number, Array
 from typing import Optional, Dict, List, Callable
 from random import randint
 
@@ -144,6 +144,16 @@ def output(arg: Value) -> Null:
 
 	return Null()
 
+@register(',')
+def box(arg: Value) -> Array:
+	# """
+	# Prints `arg` to stdout with a trailing newline.
+
+	# If `arg` ends with a `\\`, the newline is omitted and the slash is
+	# removed.
+	# """
+	return Array([arg.run()])
+
 @register('+')
 def add(lhs: Value, rhs: Value) -> Value:
 	""" Adds `rhs` to `lhs`. """
@@ -239,7 +249,7 @@ def get(text: Value, start: Value, amnt: Value) -> String:
 	return String(text[start:start+amnt])
 
 @register()
-def substitute(text: Value, start: Value, amnt: Value, repl: Value) -> String:
+def set(text: Value, start: Value, amnt: Value, repl: Value) -> String:
 	""" Returns a new string with the specified substring replaced. """
 	text = str(text)
 	start = int(start)

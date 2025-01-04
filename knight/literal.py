@@ -38,7 +38,7 @@ class Literal(Value, Generic[T], parse=False):
 
 	def __repr__(self) -> str:
 		""" Gets a debugging representation of this class. """
-		return f'{type(self).__name__}({self})'
+		return str(self)
 
 	def __eq__(self, rhs: object) -> bool:
 		"""

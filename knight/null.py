@@ -39,7 +39,7 @@ class Null(Literal[None]):
 
 	def __repr__(self) -> str:
 		""" Gets a debugging representation of this class. """
-		return 'Null()'
+		return 'null'
 
 	def __eq__(self, rhs: object) -> bool:
 		""" Null is only equal to itself. """
