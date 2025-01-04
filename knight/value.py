@@ -45,3 +45,7 @@ class Value():
 	def __bool__(self) -> bool:
 		""" Converts this class to a boolean. """
 		return bool(self.run())
+
+	def __iter__(self):
+		# """ Converts this class to a iterean. """
+		return iter(self.run())

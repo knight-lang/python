@@ -35,7 +35,7 @@ class Null(Literal[None]):
 		return ''
 
 	def __iter__(self):
-		pass
+		return iter(())
 
 	def __repr__(self) -> str:
 		""" Gets a debugging representation of this class. """

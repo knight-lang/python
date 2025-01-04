@@ -69,7 +69,15 @@ def register(name: Optional[str] = None) -> Callable:
 @register()
 def prompt() -> String:
 	""" Reads a single line from stdin. """
-	return String(input())
+	try:
+		line = input()
+	except EOFError:
+		return Null()
+
+	if line and line[-1] == '\r':
+		line = line[:-1]
+
+	return String(line)
 
 @register()
 def random() -> Number:
@@ -116,7 +124,7 @@ def not_(arg: Value) -> Boolean:
 @register()
 def length(arg: Value) -> Number:
 	""" Gets the length of its argument. """
-	return Number(len(str(arg)))
+	return Number(len(list(arg)))
 
 @register()
 def dump(arg: Value) -> Value:
@@ -144,6 +152,16 @@ def output(arg: Value) -> Null:
 
 	return Null()
 
+@register('~')
+def negate(arg: Value) -> Number:
+	# """
+	# Prints `arg` to stdout with a trailing newline.
+
+	# If `arg` ends with a `\\`, the newline is omitted and the slash is
+	# removed.
+	# """
+	return Number(-int(arg))
+
 @register(',')
 def box(arg: Value) -> Array:
 	# """
@@ -153,6 +171,27 @@ def box(arg: Value) -> Array:
 	# removed.
 	# """
 	return Array([arg.run()])
+
+@register('[')
+def head(arg: Value) -> Value:
+	if isinstance(ran := arg.run(), String):
+		return String(str(ran)[0])
+	else:
+		return Array(list(ran)[0])
+
+@register(']')
+def tail(arg: Value) -> Value:
+	if isinstance(ran := arg.run(), String):
+		return String(str(ran)[1:])
+	else:
+		return Array(list(ran)[1:])
+
+@register('A')
+def ascii(arg: Value) -> Value:
+	if isinstance(ran := arg.run(), String):
+		return Number(ord(ran.data[0]))
+	else:
+		return String(chr(ran.data))
 
 @register('+')
 def add(lhs: Value, rhs: Value) -> Value:
@@ -241,18 +280,21 @@ def if_(cond: Value, iftrue: Value, iffalse) -> Value:
 	return (iftrue if cond else iffalse).run()
 
 @register()
-def get(text: Value, start: Value, amnt: Value) -> String:
+def get(text: Value, start: Value, amnt: Value) -> Value:
 	""" Fetches the specified substring from `text`. """
-	text = str(text)
+	collection = text.run()
 	start = int(start)
 	amnt = int(amnt)
-	return String(text[start:start+amnt])
+	return type(collection)(collection.data[start:start+amnt])
 
 @register()
 def set(text: Value, start: Value, amnt: Value, repl: Value) -> String:
 	""" Returns a new string with the specified substring replaced. """
-	text = str(text)
+	collection = text.run()
 	start = int(start)
 	amnt = int(amnt)
-	repl = str(repl)
-	return String(text[:start] + repl + text[start+amnt:])
+	return type(collection)(
+		collection.data[:start] +
+		type(collection.data)(repl) +
+		collection.data[start+amnt:]
+	)

@@ -27,6 +27,9 @@ class Array(Literal[list]):
 	def __str__(self) -> str:
 		return self.join('\n')
 
+	def __int__(self) -> int:
+		return len(self.data)
+
 	def __iter__(self):
 		return iter(self.data)
 
