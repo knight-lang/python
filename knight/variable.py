@@ -1,6 +1,6 @@
 from __future__ import annotations
 from knight import Value, Stream, RunError
-from typing import Union, Dict
+from typing import Optional, Dict
 import re
 
 _ENV: Dict[str, Value] = {}
@@ -17,7 +17,7 @@ class Variable(Value):
 	name: str
 
 	@classmethod
-	def parse(cls, stream: Stream) -> Union[None, Variable]:
+	def parse(cls, stream: Stream) -> Optional[Variable]:
 		"""
 		Parses an Variable out from the stream.
 
@@ -26,6 +26,7 @@ class Variable(Value):
 		"""
 		if match := stream.matches(Variable.REGEX):
 			return cls(match)
+		return None
 
 	def __init__(self, name: str):
 		""" Creates a new Variable associated with the given `name`. """

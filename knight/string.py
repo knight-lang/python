@@ -1,9 +1,9 @@
 from __future__ import annotations
 from knight import Value, Stream, Literal, ParseError
-from typing import Union
+from typing import Optional
 import re
 
-class String(Literal[bool]):
+class String(Literal[str]):
 	"""
 	The number class in Knight.
 
@@ -17,7 +17,7 @@ class String(Literal[bool]):
 	INT_REGEX: re.Pattern = re.compile(r'^\s*[-+]?\d+')
 
 	@classmethod
-	def parse(cls, stream: Stream) -> Union[None, String]:
+	def parse(cls, stream: Stream) -> Optional[String]:
 		"""
 		Parses a `String` from the `stream`, returning `None` if the
 		nothing can be parsed.
@@ -37,6 +37,11 @@ class String(Literal[bool]):
 			raise ParseError(f'unterminated string encountered: {stream}')
 		return cls(body)
 
+
+	def __iter__(self):
+		for char in str(self):
+			yield String(char)
+
 	def __int__(self) -> int:
 		"""
 		Converts `self` to an integer, as per the Knight specs.
@@ -53,7 +58,7 @@ class String(Literal[bool]):
 		""" Concatenates `self` and `rhs` """
 		return String(f'{self}{rhs}')
 
-	def __mul__(self, rhs: Value) -> int:
+	def __mul__(self, rhs: Value) -> String:
 		""" Repeats `self` for `rhs` times """
 		return String(str(self) * int(rhs))
 

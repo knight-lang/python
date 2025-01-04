@@ -1,6 +1,6 @@
 from __future__ import annotations
 from knight import Value, Stream, Literal, RunError
-from typing import Union
+from typing import Optional
 import re
 
 class Null(Literal[None]):
@@ -9,10 +9,12 @@ class Null(Literal[None]):
 	REGEX = re.compile(r'N[A-Z]*')
 
 	@classmethod
-	def parse(cls, stream: Stream) -> Union[None, Null]:
+	def parse(cls, stream: Stream) -> Optional[Null]:
 		""" Parses `Null` if the stream starts with `N`. """
 		if stream.matches(Null.REGEX):
 			return cls()
+
+		return None
 
 	def __init__(self):
 		"""
@@ -32,11 +34,14 @@ class Null(Literal[None]):
 		""" Simply returns an empty string. """
 		return ''
 
+	def __iter__(self):
+		pass
+
 	def __repr__(self) -> str:
 		""" Gets a debugging representation of this class. """
 		return 'Null()'
 
-	def __eq__(self, rhs: Value) -> bool:
+	def __eq__(self, rhs: object) -> bool:
 		""" Null is only equal to itself. """
 		return isinstance(rhs, Null)
 

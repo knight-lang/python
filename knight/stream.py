@@ -1,5 +1,5 @@
 import re
-from typing import Union 
+from typing import Optional
 
 class Stream():
 	""" The class used when parsing data. """
@@ -17,16 +17,15 @@ class Stream():
 		""" Returns whether the stream is empty. """
 		return bool(self.source)
 
-	def strip(self):
+	def strip(self) -> None:
 		""" Removes all leading whitespace and quotes """
 		self.matches(Stream.WHITESPACE)
 
-	def peek(self) -> Union[None, str]:
+	def peek(self) -> Optional[str]:
 		""" Returns the first character of the stream """
-		if self.source:
-			return self.source[0]
+		return self.source[0] if self.source else None
 
-	def matches(self, rxp: re.Pattern, index: int = 0) -> Union[None, str]:
+	def matches(self, rxp: re.Pattern, index: int = 0) -> Optional[str]:
 		"""
 		Checks to see if the start of the stream matches `rxp`.
 

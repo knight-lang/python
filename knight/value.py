@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from knight import Stream
-from typing import Union
+from typing import Optional
 
 TYPES = []
 
@@ -11,7 +11,7 @@ class Value():
 	"""
 
 	@staticmethod
-	def parse(stream: Stream) -> Union[None, Value]:
+	def parse(stream: Stream) -> Optional[Value]:
 		"""
 		Parses a value out of the `stream`, or returns `None` if
 		nothing can be parsed.
@@ -21,6 +21,7 @@ class Value():
 		for cls in TYPES:
 			if (value := cls.parse(stream)) is not None:
 				return value
+		return None
 
 	def __init_subclass__(cls, parse: bool  =True, **rest):
 		""" Adds `cls` to the list of classes to parse. """
@@ -31,7 +32,7 @@ class Value():
 
 	def run(self) -> Value:
 		""" Return the result of running this value. """
-		raise NotImplemented
+		raise NotImplementedError()
 
 	def __int__(self) -> int:
 		""" Converts this class to an integer. """

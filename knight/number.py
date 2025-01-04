@@ -1,6 +1,6 @@
 from __future__ import annotations
 from knight import Value, Stream, Literal, RunError
-from typing import Union
+from typing import Optional
 import re
 import math
 
@@ -14,7 +14,7 @@ class Number(Literal[int]):
 	REGEX: re.Pattern = re.compile(r'^\d+')
 
 	@classmethod
-	def parse(cls, stream: Stream) -> Union[None, Number]:
+	def parse(cls, stream: Stream) -> Optional[Number]:
 		"""
 		Parses a Number out from the stream.
 
@@ -22,6 +22,11 @@ class Number(Literal[int]):
 		"""
 		if match := stream.matches(Number.REGEX):
 			return cls(int(match))
+		return None
+
+	def __iter__(self):	
+		for number in str(self):
+			yield Number(int(number))
 
 	def __add__(self, rhs: Value) -> Number:
 		""" Converts `rhs` to an `int` and adds it to `self.` """
@@ -42,8 +47,8 @@ class Number(Literal[int]):
 
 		This will raise a `RunError` if `rhs` is zero.
 		"""
-		if rhs := int(rhs):
-			return Number(math.trunc(int(self) / rhs))
+		if rhs_int := int(rhs):
+			return Number(math.trunc(int(self) / rhs_int))
 		else:
 			raise RunError('Cannot divide by zero!')
 
@@ -54,8 +59,8 @@ class Number(Literal[int]):
 
 		This will raise a `RunError` if `rhs` is zero.
 		"""
-		if rhs := int(rhs):
-			return Number(int(self) % rhs)
+		if rhs_int := int(rhs):
+			return Number(int(self) % rhs_int)
 		else:
 			raise RunError('Cannot divide by zero!')
 

@@ -40,7 +40,7 @@ class Literal(Value, Generic[T], parse=False):
 		""" Gets a debugging representation of this class. """
 		return f'{type(self).__name__}({self})'
 
-	def __eq__(self, rhs: Value) -> bool:
+	def __eq__(self, rhs: object) -> bool:
 		"""
 		Returns whether `rhs` is of the _same_ class, 
 		and their data is equivalent.

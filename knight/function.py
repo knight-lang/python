@@ -1,13 +1,13 @@
 from __future__ import annotations
 from knight import Value, Stream, ParseError, RunError, \
                    Variable, Boolean, Null, String, Number
-from typing import Union, Dict, List
+from typing import Optional, Dict, List, Callable
 from random import randint
 
 import re
 import subprocess
 
-_FUNCS: Dict[str, callable] = {}
+_FUNCS: Dict[str, Callable] = {}
 
 class Function(Value):
 	""" Used to represent functions and their arguments within Knight. """
@@ -15,7 +15,7 @@ class Function(Value):
 	REGEX: re.Pattern = re.compile(r'[A-Z]+|.')
 
 	@staticmethod
-	def parse(stream: Stream) -> Union[None, Function]:
+	def parse(stream: Stream) -> Optional[Function]:
 		"""
 		Parses a `Function` from the stream, returning `None` if the
 		stream didn't start with a function character.
@@ -41,7 +41,7 @@ class Function(Value):
 
 		return Function(func, name, args)
 
-	def __init__(self, func: callable, name: str, args: list[Value]):
+	def __init__(self, func: Callable, name: str, args: list[Value]):
 		"""
 		Creates a new function that'll execute `func` with `args`.
 
@@ -57,7 +57,7 @@ class Function(Value):
 	def __repr__(self) -> str:
 		return f'Function({self.name}, {self.args})'
 
-def register(name: Union[None, str] = None) -> callable:
+def register(name: Optional[str] = None) -> Callable:
 	"""
 	Used to register a new function with the given name.
 
